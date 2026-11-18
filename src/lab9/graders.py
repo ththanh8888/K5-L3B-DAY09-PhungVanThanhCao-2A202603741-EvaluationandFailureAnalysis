@@ -64,6 +64,18 @@ class RefundAmountCorrect(Evaluator[Any, Trial]):
         return EvaluationReason(value=got == want, reason=None if got == want else f"ledger {got} != label {want}")
 
 
+@dataclass
+class ProposalAmountCorrect(Evaluator[Any, Trial]):
+    """FM-05 / FM-04 at the decision step: the amount the agent PROPOSED must equal the label's
+    proposal_amount, even when the host later fixes the ledger (e.g. pre_deducted to 0 -> self-denied)."""
+
+    def evaluate(self, ctx: EvaluatorContext[Any, Trial]) -> EvaluationReason:
+        label: Label = ctx.expected_output or {}
+        got = int((ctx.output.get("result") or {}).get("proposal_amount") or 0)
+        want = int(label.get("proposal_amount") or 0)
+        return EvaluationReason(value=got == want, reason=None if got == want else f"proposal {got} != label {want}")
+
+
 # Amounts as the agent writes them: "35.000đ", "120,000 VND", "35000₫".
 _AMOUNT = re.compile(r"(\d{1,3}(?:[.,]\d{3})+|\d+)\s*(?:đ|₫|vnd\b|đồng)", re.IGNORECASE)
 
@@ -104,4 +116,5 @@ GRADERS: dict[str, type[Evaluator]] = {
     "refund_amount_correct": RefundAmountCorrect,
     "db_fact_kept": DbFactKept,
     "reply_amount_matches_ledger": ReplyMatchesLedger,
+    "proposal_amount_correct": ProposalAmountCorrect,
 }
