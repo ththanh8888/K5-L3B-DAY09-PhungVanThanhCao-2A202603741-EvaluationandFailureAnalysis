@@ -1,5 +1,5 @@
 # Lab 9 metric spec. Same eval-set version => thresholds may only get stricter (ratchet).
-metric_spec_version: "1.0"
+metric_spec_version: "1.1"   # 1.1: + proposal_amount_correct (stricter only; same eval set)
 eval_set_version: v1
 eval_set: data/eval/eval_set_v1.jsonl
 labels: data/eval/labels_v1.json          # labels never inline in items
@@ -17,3 +17,7 @@ metrics:
   - {id: cost_per_success,      kind: system,     level: system,     grader: lab8.metrics.summarize, threshold: {max_increase: 0.10}, blocking: false}
   # FM-08 misreport: every amount stated in the reply must equal the ledger's refund_vnd for the claim.
   - {id: reply_amount_matches_ledger, kind: capability, level: outcome, grader: code, threshold: {min: 1.0}, blocking: true}
+  # FM-05 / FM-04 at the decision step: proposed amount == label proposal_amount (catches a self-denial
+  # after pre-deduction that leaves the ledger correct, e.g. seeded_regression C-013).
+  - {id: proposal_amount_correct, kind: capability, level: step, grader: code, blocking: true,
+     threshold: {min: 0.95, no_significant_drop: true}}

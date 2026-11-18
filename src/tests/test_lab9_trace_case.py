@@ -53,6 +53,18 @@ def test_c008_misreport_caught_although_lab8_passes(run):
     assert graders.ReplyMatchesLedger().evaluate(_ctx(good)).value is True
 
 
+def test_c013_pre_deducted_caught_at_proposal_step(run):
+    """FM-05: seeded_regression C-013@11 self-denies after pre-deducting 35.000đ (event 5 proposal 0);
+    the ledger stays correct (0 = label), so only the proposal-level grader explains the failure."""
+    from lab9 import graders
+
+    bad, good = run("seeded_regression", "C-013", 11), run("fixed", "C-013", 11)
+    assert bad["trial"]["lab8_pass"] is False
+    assert graders.RefundAmountCorrect().evaluate(_ctx(bad)).value is True
+    assert graders.ProposalAmountCorrect().evaluate(_ctx(bad)).value is False
+    assert graders.ProposalAmountCorrect().evaluate(_ctx(good)).value is True
+
+
 def test_reply_amount_parser():
     from lab9.graders import reply_amounts
 
