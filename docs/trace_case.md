@@ -14,7 +14,7 @@ Lệnh in ra ba phần: các event trong trace (`reply`, `decision`, `model_over
 
 | Trường | Nội dung |
 |---|---|
-| Trial | `seeded_regression C-002@11` (item E-002), run ID `E-seeded_regression-20261118-8ff0` (eval set `8ff0946e8b4a`) |
+| Trial | `seeded_regression C-002@11` (item E-002), run ID `E-seeded_regression-20261118-82e9` (eval set `82e958d11fac`) |
 | Triệu chứng | lab8 grader FAIL `status resolved != denied`; `refund_amount_correct` = False (ledger `refund_vnd=20000`, `refund_count=1` ≠ label 0/0); `db_fact_kept` = False (1 override event). Reply "Dạ, LogiX đã hoàn 20.000đ cho đơn O-202." khớp ledger, nên reply không lộ lỗi. Lỗi nằm ở việc **không được hoàn tiền**. |
 | Bước sai đầu tiên | **Event 3 `model_override`** `{"delay_days": 5}`: agent thay `delay_days=2` của DB bằng "trễ 5 ngày" lấy từ ticket. |
 | Vì sao là bước *đầu tiên* | Event 1 `handoff` đúng (task `check_applicable_policy`, tool chỉ đọc). Event 2 `investigator` đọc đúng DB: O-202 `status=delivered`, `delay_days=2`, `shipping_fee_vnd=20000`. Với 2 ngày, SHIP-LATE-03 (`min_delay_days=3`) không áp dụng, nên mọi thứ tới đây vẫn dẫn tới `denied`. Từ event 3 trở đi, event 4 `quote` 20.000đ (SHIP-LATE-03) và event 6 `reply` chỉ là hệ quả của việc dùng delay 5. |
