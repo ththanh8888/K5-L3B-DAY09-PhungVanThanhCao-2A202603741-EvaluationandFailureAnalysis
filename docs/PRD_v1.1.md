@@ -72,7 +72,7 @@ Quy tắc: tiền và phê duyệt luôn chấm bằng code. Judge chỉ dùng c
 - [ ] FM-01, FM-06, FM-07 không xảy ra trên shape công khai; grader chỉ được kiểm trên variant một lỗi tự dựng, chưa trên lỗi thật.
 - [ ] `reply_amount_matches_ledger` không có tín hiệu trên baseline `swarm` (Lab 8 không ghi event `reply`), nên chỉ có hiệu lực với shape có reply.
 - [x] ~~Trial chỉ sai đề xuất mà ledger vẫn đúng (C-013) chỉ bị `pass_rate` bắt~~. Đã thêm `proposal_amount_correct` (metric_spec 1.1).
-- [ ] Lỗi chỉ xuất hiện ở một phần seed (ví dụ FM-04 ở seed lẻ hoặc 1/5 seed) có thể lọt qua trung bình. Đã thêm slice gate `money_movement` / `adversarial` ở v2 (M5); còn cần `pass_hat_5` (M6).
+- [ ] Lỗi chỉ xuất hiện ở một phần seed (ví dụ FM-04 ở seed lẻ hoặc 1/5 seed) có thể lọt qua trung bình. Đã thêm slice gate `money_movement` / `adversarial` (M5) và `pass_hat_5` ≥ 0.85 blocking (M6) ở v2. Bug chỉ ở 1/3 seed (`rare`) vẫn không phát hiện ổn định với 5 seed (xem eval card, mục v2).
 
 ## 7. Khi nào lên v1.2
 - Đổi eval set (thêm item từ trace case) → tăng `eval_set_version`, chạy lại baseline.
